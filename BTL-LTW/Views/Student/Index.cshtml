@@ -1,0 +1,110 @@
+@model IEnumerable<BTL_LTW.Models.Student>
+@{
+    ViewData["Title"] = "Danh Sách Sinh Viên";
+    var departments = ViewBag.Departments as List<BTL_LTW.Models.Department> ?? new List<BTL_LTW.Models.Department>();
+}
+
+<div class="container-xxl flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            <span class="text-muted fw-light">Cổng Sinh Viên /</span> Danh Sách Toàn Trường
+        </h4>
+        <a asp-action="Lookup" class="btn btn-primary">
+            <i class="bx bx-search-alt me-1"></i> Tra cứu điểm trực tuyến
+        </a>
+    </div>
+
+    <!-- Khối Card chính -->
+    <div class="card">
+        <!-- Card Header: Bộ lọc tìm kiếm -->
+        <div class="card-header border-bottom">
+            <form method="get" asp-action="Index" class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group search-input-group">
+                        <span class="input-group-text bg-transparent border-0 text-muted ps-3">
+                            <i class="bx bx-search fs-5"></i>
+                        </span>
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control border-0 bg-transparent shadow-none" placeholder="Tìm theo tên sinh viên, mã SV, lớp...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select name="departmentId" class="form-select">
+                        <option value="">-- Tất cả Khoa / Viện --</option>
+                        @foreach (var d in departments)
+                        {
+                            <option value="@d.Id" selected="@(ViewBag.DepartmentId == d.Id)">@d.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2 justify-content-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bx bx-filter-alt me-1"></i> Tìm kiếm
+                    </button>
+                    <a asp-action="Index" class="btn btn-label-secondary" title="Làm mới">
+                        <i class="bx bx-refresh"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng danh sách sinh viên -->
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">Ảnh</th>
+                        <th>Mã SV</th>
+                        <th>Họ và Tên</th>
+                        <th>Khoa / Ngành</th>
+                        <th>Lớp</th>
+                        <th class="text-center">Điểm GPA</th>
+                        <th class="text-center">Xếp loại</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-end">Hồ sơ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center py-5 text-muted">
+                                <i class="bx bx-folder-open fs-1 d-block mb-2"></i>
+                                Không tìm thấy sinh viên nào phù hợp với từ khóa tìm kiếm.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="avatar avatar-online">
+                                    <img src="@s.Avatar" alt="@s.FullName" class="rounded-circle" />
+                                </div>
+                            </td>
+                            <td><span class="badge bg-label-dark fw-bold">@s.StudentCode</span></td>
+                            <td>
+                                <div class="fw-bold text-dark">@s.FullName</div>
+                                <small class="text-muted">@s.Email</small>
+                            </td>
+                            <td>@s.DepartmentName</td>
+                            <td><span class="badge bg-label-secondary">@s.ClassName</span></td>
+                            <td class="text-center fw-bold text-primary fs-6">@s.GPA</td>
+                            <td class="text-center"><span class="badge @s.RankBadgeClass">@s.AcademicRank</span></td>
+                            <td class="text-center"><span class="badge @s.StatusBadgeClass">@s.StatusText</span></td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-label-primary">
+                                    <i class="bx bx-show me-1"></i> Xem điểm
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between align-items-center py-3 bg-light">
+            <span class="text-muted small">Hiển thị <strong>@Model.Count()</strong> sinh viên</span>
+            <span class="text-muted small">Năm học @DateTime.Now.Year - @(DateTime.Now.Year + 1)</span>
+        </div>
+    </div>
+</div>

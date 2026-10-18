@@ -1,0 +1,150 @@
+@model BTL_LTW.Models.Department
+@{
+    ViewData["Title"] = "Chi Tiết Khoa: " + Model.Name;
+    var students = ViewBag.Students as List<BTL_LTW.Models.Student> ?? new List<BTL_LTW.Models.Student>();
+    var courses = ViewBag.Courses as List<BTL_LTW.Models.Course> ?? new List<BTL_LTW.Models.Course>();
+}
+
+<div class="container-xxl flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            <span class="text-muted fw-light">Đào tạo / Khoa & Viện /</span> @Model.Name
+        </h4>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="bx bx-edit-alt me-1"></i> Chỉnh sửa</a>
+            <a asp-action="Index" class="btn btn-outline-secondary"><i class="bx bx-arrow-back me-1"></i> Quay lại</a>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-primary p-2">
+                                <i class="bx bx-buildings fs-3"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <span class="badge bg-label-primary mb-1">@Model.DepartmentCode</span>
+                            <h5 class="fw-bold text-dark mb-0">@Model.Name</h5>
+                        </div>
+                    </div>
+
+                    <div class="divider text-start mb-3">
+                        <div class="divider-text text-muted small">THÔNG TIN KHOA</div>
+                    </div>
+
+                    <ul class="list-unstyled small mb-0">
+                        <li class="mb-3">
+                            <span class="text-muted d-block">Trưởng khoa phụ trách:</span>
+                            <strong class="fs-6 text-dark"><i class="bx bx-user-voice text-primary me-1"></i>@Model.Dean</strong>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted d-block">Điện thoại liên hệ:</span>
+                            <strong class="text-dark"><i class="bx bx-phone text-primary me-1"></i>@Model.Phone</strong>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted d-block">Email khoa:</span>
+                            <strong class="text-dark"><i class="bx bx-envelope text-primary me-1"></i>@Model.Email</strong>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted d-block">Ngày thành lập:</span>
+                            <strong class="text-dark"><i class="bx bx-calendar text-primary me-1"></i>@Model.EstablishedDate.ToString("dd/MM/yyyy")</strong>
+                        </li>
+                        <li class="mb-3">
+                            <span class="text-muted d-block">Quy mô hiện tại:</span>
+                            <span class="badge bg-label-primary fs-6">@students.Count sinh viên</span>
+                        </li>
+                        <li>
+                            <span class="text-muted d-block">Mô tả giới thiệu:</span>
+                            <p class="text-muted mt-1 small">@Model.Description</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Danh sách môn học phụ trách -->
+            <div class="card mb-4">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-book-bookmark text-success me-2"></i>Môn Học Phụ Trách (@courses.Count môn)</h5>
+                </div>
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã môn</th>
+                                <th>Tên môn học</th>
+                                <th class="text-center">Số tín chỉ</th>
+                                <th>Học kỳ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!courses.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center py-3 text-muted">Chưa có môn học nào thuộc khoa này.</td>
+                                </tr>
+                            }
+                            @foreach (var c in courses)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-label-dark">@c.CourseCode</span></td>
+                                    <td class="fw-semibold text-dark">@c.Name</td>
+                                    <td class="text-center"><span class="badge bg-label-secondary">@c.Credits tín chỉ</span></td>
+                                    <td>@c.Semester</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Danh sách sinh viên thuộc khoa -->
+            <div class="card">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-user-pin text-primary me-2"></i>Sinh Viên Đang Học Tại Khoa (@students.Count SV)</h5>
+                    <a asp-controller="Student" asp-action="Create" class="btn btn-sm btn-primary">+ Thêm SV</a>
+                </div>
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã SV</th>
+                                <th>Họ và Tên</th>
+                                <th>Lớp</th>
+                                <th class="text-center">GPA</th>
+                                <th class="text-center">Học lực</th>
+                                <th class="text-end">Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!students.Any())
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center py-3 text-muted">Khoa hiện chưa có sinh viên nào.</td>
+                                </tr>
+                            }
+                            @foreach (var s in students)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-label-dark">@s.StudentCode</span></td>
+                                    <td class="fw-semibold text-dark">@s.FullName</td>
+                                    <td><span class="badge bg-label-secondary">@s.ClassName</span></td>
+                                    <td class="text-center fw-bold text-primary">@s.GPA</td>
+                                    <td class="text-center"><span class="badge @s.RankBadgeClass">@s.AcademicRank</span></td>
+                                    <td class="text-end">
+                                        <a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-icon btn-label-info" title="Chi tiết"><i class="bx bx-show"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

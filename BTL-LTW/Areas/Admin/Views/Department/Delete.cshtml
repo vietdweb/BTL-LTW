@@ -1,0 +1,45 @@
+@model BTL_LTW.Models.Department
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Khoa / Viện: " + Model.Name;
+}
+
+<div class="container-xxl flex-grow-1">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Đào tạo / Khoa & Viện /</span> Xác nhận xóa
+    </h4>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card text-center p-4">
+                <div class="avatar avatar-xl mx-auto mb-3" style="width: 70px; height: 70px;">
+                    <span class="avatar-initial rounded-circle bg-label-danger p-3">
+                        <i class="bx bx-error-circle fs-1"></i>
+                    </span>
+                </div>
+                <h4 class="fw-bold text-danger mb-2">Bạn có chắc chắn muốn xóa khoa này?</h4>
+                <p class="text-muted mb-4 small">Lưu ý: Chỉ có thể xóa những khoa hiện không còn sinh viên nào đang theo học.</p>
+
+                <div class="card bg-light border-0 p-3 mb-4 text-start">
+                    <h5 class="fw-bold mb-1 text-dark">@Model.Name</h5>
+                    <div class="text-muted small mb-3">Mã khoa: <span class="badge bg-label-primary">@Model.DepartmentCode</span></div>
+                    <div class="small">
+                        <div class="mb-1"><strong>Trưởng khoa:</strong> @Model.Dean</div>
+                        <div class="mb-1"><strong>Số điện thoại:</strong> @Model.Phone</div>
+                        <div class="mb-1"><strong>Email:</strong> @Model.Email</div>
+                        <div><strong>Số lượng sinh viên:</strong> <span class="badge bg-label-primary">@Model.StudentCount SV</span></div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-center gap-2">
+                        <a asp-action="Index" class="btn btn-label-secondary px-4">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="bx bx-trash me-1"></i> Xác nhận xóa
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

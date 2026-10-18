@@ -1,0 +1,165 @@
+@model BTL_LTW.Models.RegisterViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Đăng Ký Tài Khoản";
+}
+
+<!DOCTYPE html>
+<html lang="vi" class="light-style customizer-hide">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Đăng Ký - EduPortal Quản Lý Sinh Viên</title>
+
+    <!-- Google Fonts: Public Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/sneat.css" asp-append-version="true" />
+
+    <style>
+        body {
+            background-color: #f5f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Public Sans', sans-serif;
+            padding: 2rem 1.5rem;
+        }
+        .auth-card {
+            max-width: 500px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px 0 rgba(67, 89, 113, 0.12);
+            border: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card card my-auto">
+        <div class="card-body p-4 p-sm-5">
+            <!-- Logo Brand -->
+            <div class="app-brand justify-content-center mb-4 p-0 border-0">
+                <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
+                    <span class="app-brand-logo text-primary">
+                        <i class="bx bxs-graduation" style="font-size: 2.2rem;"></i>
+                    </span>
+                    <span class="app-brand-text fw-bolder text-dark fs-4">
+                        EduPortal
+                    </span>
+                </a>
+            </div>
+
+            <h4 class="mb-2 fw-bold text-dark text-center">Tạo Tài Khoản Mới 🚀</h4>
+            <p class="mb-4 text-muted small text-center">Bắt đầu quản lý học tập và theo dõi tiến độ đào tạo</p>
+
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small py-2 mb-3" role="alert"></div>
+
+                <!-- Họ và tên -->
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-user"></i></span>
+                        <input asp-for="FullName" class="form-control" placeholder="Nhập họ và tên đầy đủ..." autofocus />
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <!-- Tên đăng nhập & Email -->
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Username" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-at"></i></span>
+                            <input asp-for="Username" class="form-control" placeholder="vd: hungnv" />
+                        </div>
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Role" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-shield"></i></span>
+                            <select asp-for="Role" class="form-select">
+                                <option value="Sinh viên">Sinh viên</option>
+                                <option value="Giảng viên">Giảng viên</option>
+                                <option value="Admin">Quản trị viên</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                        <input asp-for="Email" type="email" class="form-control" placeholder="example@student.edu.vn" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <!-- Mật khẩu & Xác nhận mật khẩu -->
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="Password" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-lock-alt"></i></span>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-check-shield"></i></span>
+                            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Nhập lại mật khẩu" />
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <!-- Điều khoản sử dụng -->
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input asp-for="AgreeTerms" class="form-check-input" type="checkbox" id="terms-conditions" />
+                        <label class="form-check-label small" for="terms-conditions">
+                            Tôi đồng ý với <a href="javascript:void(0);" class="text-primary text-decoration-none">chính sách bảo mật & quy định</a> của nhà trường.
+                        </label>
+                    </div>
+                    <span asp-validation-for="AgreeTerms" class="text-danger small d-block"></span>
+                </div>
+
+                <!-- Nút Đăng ký -->
+                <button class="btn btn-primary d-grid w-100 py-2 fw-semibold mb-3" type="submit">
+                    <i class="bx bx-user-check me-1"></i> Đăng Ký Tài Khoản
+                </button>
+            </form>
+
+            <p class="text-center mb-2 small">
+                <span>Đã có tài khoản?</span>
+                <a asp-action="Login" class="fw-semibold text-primary text-decoration-none">
+                    Đăng nhập tại đây
+                </a>
+            </p>
+            <p class="text-center mb-0 small">
+                <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
+                    <i class="bx bx-arrow-back me-1"></i> Quay về trang chủ
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Script validation -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+@model BTL_LTW.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Tổng Quan Quản Trị & Đào Tạo";
+    var departments = ViewBag.Departments as List<BTL_LTW.Models.Department> ?? new List<BTL_LTW.Models.Department>();
+    var topStudents = ViewBag.TopStudents as List<BTL_LTW.Models.Student> ?? new List<BTL_LTW.Models.Student>();
+
+    string greeting = "Xin chào";
+    int hour = DateTime.Now.Hour;
+    if (hour >= 5 && hour < 11) { greeting = "Chào buổi sáng"; }
+    else if (hour >= 11 && hour < 14) { greeting = "Chào buổi trưa"; }
+    else if (hour >= 14 && hour < 18) { greeting = "Chào buổi chiều"; }
+    else { greeting = "Chào buổi tối"; }
+}
+
+<div class="container-xxl flex-grow-1">
+    <!-- Tiêu đề trang chuẩn Sneat -->
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Dashboard /</span> Tổng Quan Hệ Thống Đào Tạo
+    </h4>
+
+    <!-- 1. KHỐI CHÀO MỪNG (GREETING BANNER CARD) -->
+    <div class="card mb-4 greeting-card hover-lift">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-label-primary px-3 py-1 mb-2 fw-bold">
+                        <i class="bx bxs-star me-1"></i> Năm học @DateTime.Now.Year - @(DateTime.Now.Year + 1)
+                    </span>
+                    <h3 class="fw-bold text-primary mb-2">
+                        @greeting, Ban Quản Trị & Đào Tạo!
+                    </h3>
+                    <p class="text-muted mb-3" style="max-width: 620px;">
+                        Chào mừng bạn đến với Cổng thông tin & Quản trị sinh viên trực tuyến. Hệ thống đang đồng bộ và theo dõi 
+                        <strong>@Model.TotalStudents</strong> hồ sơ sinh viên thuộc <strong>@Model.TotalDepartments</strong> khoa viện toàn trường.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a asp-area="Admin" asp-controller="Student" asp-action="Create" class="btn btn-primary">
+                            <i class="bx bx-user-plus me-1"></i> Tiếp nhận sinh viên mới
+                        </a>
+                        <a asp-area="Admin" asp-controller="Grade" asp-action="Create" class="btn btn-outline-primary">
+                            <i class="bx bx-edit me-1"></i> Nhập điểm học phần
+                        </a>
+                        <a asp-area="" asp-controller="Student" asp-action="Lookup" class="btn btn-label-secondary">
+                            <i class="bx bx-search-alt me-1"></i> Cổng tra cứu điểm online
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center mt-3 mt-lg-0">
+                    <div class="d-inline-block p-3 bg-white rounded-circle shadow-sm">
+                        <i class="bx bxs-graduation text-primary" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. KHỐI 4 THẺ KPI CHUẨN SNEAT -->
+    <div class="row g-4 mb-4">
+        <!-- Card 1: Tổng Sinh Viên -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="avatar flex-shrink-0">
+                            <span class="avatar-initial rounded bg-label-primary p-2">
+                                <i class="bx bx-user fs-3"></i>
+                            </span>
+                        </div>
+                        <span class="badge bg-label-success">Đang học: @Model.ActiveStudents</span>
+                    </div>
+                    <span class="d-block mb-1 text-muted small fw-semibold">TỔNG SINH VIÊN</span>
+                    <h3 class="card-title fw-bold text-dark mb-1">@Model.TotalStudents</h3>
+                    <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> 100% hồ sơ số hóa</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Khoa & Viện -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="avatar flex-shrink-0">
+                            <span class="avatar-initial rounded bg-label-success p-2">
+                                <i class="bx bx-buildings fs-3"></i>
+                            </span>
+                        </div>
+                        <span class="badge bg-label-primary">Chuyên ngành</span>
+                    </div>
+                    <span class="d-block mb-1 text-muted small fw-semibold">KHOA & VIỆN ĐÀO TẠO</span>
+                    <h3 class="card-title fw-bold text-dark mb-1">@Model.TotalDepartments</h3>
+                    <small class="text-muted"><i class="bx bx-check-double text-success"></i> Đạt chuẩn kiểm định</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Môn học -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="avatar flex-shrink-0">
+                            <span class="avatar-initial rounded bg-label-warning p-2">
+                                <i class="bx bx-book-bookmark fs-3"></i>
+                            </span>
+                        </div>
+                        <span class="badge bg-label-warning">Tín chỉ</span>
+                    </div>
+                    <span class="d-block mb-1 text-muted small fw-semibold">HỌC PHẦN ĐÀO TẠO</span>
+                    <h3 class="card-title fw-bold text-dark mb-1">@Model.TotalCourses</h3>
+                    <small class="text-warning fw-semibold"><i class="bx bx-time-five"></i> Cập nhật liên tục</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Tỷ lệ Xuất Sắc & Giỏi -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="card h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="avatar flex-shrink-0">
+                            <span class="avatar-initial rounded bg-label-danger p-2">
+                                <i class="bx bx-trophy fs-3"></i>
+                            </span>
+                        </div>
+                        <span class="badge bg-label-danger">GPA &ge; 8.0</span>
+                    </div>
+                    <span class="d-block mb-1 text-muted small fw-semibold">SINH VIÊN GIỎI / XS</span>
+                    <h3 class="card-title fw-bold text-danger mb-1">@(Model.ExcellentCount + Model.GoodCount)</h3>
+                    <small class="text-muted">Tỷ lệ xuất sắc cao</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. PHÂN BỐ HỌC LỰC & QUY MÔ KHOA -->
+    <div class="row g-4 mb-4">
+        <!-- Phân bố học lực -->
+        <div class="col-lg-5">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-pie-chart-alt-2 text-primary me-2"></i>Phân Bố Xếp Loại Học Lực</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold text-danger"><i class="bx bxs-star me-1"></i> Xuất sắc (GPA &ge; 9.0)</span>
+                            <span class="fw-bold">@Model.ExcellentCount SV</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" style="width: @(Model.TotalStudents > 0 ? (Model.ExcellentCount * 100 / Model.TotalStudents) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold text-success"><i class="bx bx-check-circle me-1"></i> Giỏi (8.0 - 8.9)</span>
+                            <span class="fw-bold">@Model.GoodCount SV</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: @(Model.TotalStudents > 0 ? (Model.GoodCount * 100 / Model.TotalStudents) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold text-info"><i class="bx bx-badge-check me-1"></i> Khá (6.5 - 7.9)</span>
+                            <span class="fw-bold">@Model.FairCount SV</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: @(Model.TotalStudents > 0 ? (Model.FairCount * 100 / Model.TotalStudents) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold text-warning"><i class="bx bx-error me-1"></i> Trung bình (5.0 - 6.4)</span>
+                            <span class="fw-bold">@Model.AverageCount SV</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" style="width: @(Model.TotalStudents > 0 ? (Model.AverageCount * 100 / Model.TotalStudents) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tóm tắt trạng thái -->
+                    <div class="row text-center pt-2 border-top">
+                        <div class="col-4 border-end">
+                            <h4 class="text-success fw-bold mb-0">@Model.ActiveStudents</h4>
+                            <small class="text-muted">Đang học</small>
+                        </div>
+                        <div class="col-4 border-end">
+                            <h4 class="text-primary fw-bold mb-0">@Model.GraduatedStudents</h4>
+                            <small class="text-muted">Tốt nghiệp</small>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="text-warning fw-bold mb-0">@Model.ReservedStudents</h4>
+                            <small class="text-muted">Bảo lưu</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quy mô sinh viên từng khoa -->
+        <div class="col-lg-7">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-bar-chart text-success me-2"></i>Quy Mô & Điểm GPA Theo Khoa</h5>
+                    <a asp-area="Admin" asp-controller="Department" asp-action="Index" class="btn btn-sm btn-outline-primary">Quản lý Khoa</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Tên Khoa / Viện</th>
+                                <th class="text-center">Số lượng SV</th>
+                                <th class="text-center">Điểm GPA TB</th>
+                                <th class="text-end">Tỷ lệ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in Model.DepartmentStats)
+                            {
+                                var pct = Model.TotalStudents > 0 ? (d.StudentCount * 100 / Model.TotalStudents) : 0;
+                                <tr>
+                                    <td class="fw-semibold text-dark">
+                                        <i class="bx bx-buildings text-primary me-1"></i> @d.DepartmentName
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-label-primary">@d.StudentCount SV</span>
+                                    </td>
+                                    <td class="text-center fw-bold text-primary">@d.AverageGPA</td>
+                                    <td class="text-end" style="width: 140px;">
+                                        <div class="d-flex align-items-center justify-content-end gap-2">
+                                            <span class="small text-muted">@pct%</span>
+                                            <div class="progress flex-grow-1" style="max-width: 65px;">
+                                                <div class="progress-bar bg-primary" style="width: @pct%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. GƯƠNG MẶT TIÊU BIỂU (TOP GPA) -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0 text-dark"><i class="bx bxs-medal text-warning me-2 fs-4"></i>Gương Mặt Sinh Viên Tiêu Biểu</h5>
+        <a asp-area="Admin" asp-controller="Student" asp-action="Index" class="btn btn-sm btn-outline-primary">Xem toàn bộ danh sách &rarr;</a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        @foreach (var s in topStudents)
+        {
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 text-center p-3 hover-lift">
+                    <div class="position-relative mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <img src="@s.Avatar" alt="@s.FullName" class="rounded-circle border border-2 border-primary w-100 h-100 object-fit-cover shadow-sm">
+                        <span class="position-absolute bottom-0 end-0 badge rounded-pill bg-danger border border-white">
+                            @s.GPA
+                        </span>
+                    </div>
+                    <h6 class="fw-bold mb-1 text-dark text-truncate">@s.FullName</h6>
+                    <span class="badge bg-label-secondary mb-2">@s.StudentCode &bull; @s.ClassName</span>
+                    <p class="text-muted small mb-3 text-truncate">@s.DepartmentName</p>
+                    <div class="mt-auto">
+                        <a asp-area="" asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-primary w-100">
+                            <i class="bx bx-show me-1"></i> Xem hồ sơ & điểm
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- 5. SINH VIÊN MỚI CẬP NHẬT GẦN ĐÂY -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 fw-bold"><i class="bx bx-history text-primary me-2"></i>Hồ Sơ Mới Nhập Học & Cập Nhật</h5>
+            <a asp-area="Admin" asp-controller="Student" asp-action="Index" class="btn btn-sm btn-label-primary">Quản lý sinh viên</a>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã SV</th>
+                        <th>Họ và Tên</th>
+                        <th>Khoa / Viện</th>
+                        <th>Lớp</th>
+                        <th class="text-center">Điểm GPA</th>
+                        <th class="text-center">Xếp loại</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-end">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model.RecentStudents)
+                    {
+                        <tr>
+                            <td><span class="badge bg-label-dark fw-bold">@s.StudentCode</span></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-online me-2" style="width: 32px; height: 32px;">
+                                        <img src="@s.Avatar" class="rounded-circle" alt="@s.FullName" />
+                                    </div>
+                                    <span class="fw-semibold text-dark">@s.FullName</span>
+                                </div>
+                            </td>
+                            <td>@s.DepartmentName</td>
+                            <td><span class="badge bg-label-secondary">@s.ClassName</span></td>
+                            <td class="text-center fw-bold text-primary">@s.GPA</td>
+                            <td class="text-center"><span class="badge @s.RankBadgeClass">@s.AcademicRank</span></td>
+                            <td class="text-center"><span class="badge @s.StatusBadgeClass">@s.StatusText</span></td>
+                            <td class="text-end">
+                                <a asp-area="" asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-icon btn-label-info me-1" title="Chi tiết">
+                                    <i class="bx bx-show"></i>
+                                </a>
+                                <a asp-area="Admin" asp-controller="Student" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-icon btn-label-primary" title="Sửa">
+                                    <i class="bx bx-edit-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

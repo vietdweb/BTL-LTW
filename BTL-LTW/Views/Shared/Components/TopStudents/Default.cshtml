@@ -1,0 +1,25 @@
+@model IEnumerable<BTL_LTW.Models.Student>
+
+<div class="row g-4">
+    @foreach (var s in Model)
+    {
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 text-center p-3 hover-lift">
+                <div class="position-relative mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <img src="@s.Avatar" alt="@s.FullName" class="rounded-circle border border-2 border-primary w-100 h-100 object-fit-cover shadow-sm">
+                    <span class="position-absolute bottom-0 end-0 badge rounded-pill bg-danger border border-white">
+                        @s.GPA
+                    </span>
+                </div>
+                <h6 class="fw-bold mb-1 text-dark text-truncate">@s.FullName</h6>
+                <span class="badge bg-label-secondary mb-2">@s.StudentCode &bull; @s.ClassName</span>
+                <p class="text-muted small mb-3 text-truncate">@s.DepartmentName</p>
+                <div class="mt-auto">
+                    <a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-sm btn-primary w-100">
+                        <i class="bx bx-show me-1"></i> Xem hồ sơ & điểm
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

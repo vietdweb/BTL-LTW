@@ -1,0 +1,118 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    var username = Context.Session.GetString("Username");
+    var fullName = Context.Session.GetString("FullName") ?? "Khách";
+    var userRole = Context.Session.GetString("UserRole") ?? "Khách";
+    var userAvatar = Context.Session.GetString("Avatar") ?? "/images/students/avatar-1.svg";
+    bool isLoggedIn = !string.IsNullOrEmpty(username);
+}
+
+<nav class="layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+    <!-- Nút Toggle Mobile -->
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="btnToggleSidebar">
+            <i class="bx bx-menu bx-sm"></i>
+        </a>
+    </div>
+
+    <!-- Thanh tìm kiếm nhanh sinh viên trên Navbar -->
+    <div class="navbar-nav align-items-center flex-grow-1">
+        <form asp-area="" asp-controller="Home" asp-action="QuickSearch" method="post" class="d-flex align-items-center w-100" style="max-width: 480px;">
+            <div class="input-group search-input-group">
+                <span class="input-group-text bg-transparent border-0 text-muted ps-3">
+                    <i class="bx bx-search fs-5"></i>
+                </span>
+                <input type="text" name="studentCode" class="form-control border-0 bg-transparent shadow-none" placeholder="Tra cứu nhanh theo Mã Sinh Viên (VD: SV202201)..." required />
+                <button class="btn btn-sm btn-primary rounded-pill m-1 px-3" type="submit">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Side Actions & User Profile -->
+    <ul class="navbar-nav flex-row align-items-center ms-auto gap-2">
+        <!-- Quick Action: Thêm SV (Chỉ hiện cho Admin) -->
+        @if (userRole == "Admin")
+        {
+            <li class="nav-item d-none d-md-block">
+                <a asp-area="Admin" asp-controller="Student" asp-action="Create" class="btn btn-sm btn-primary">
+                    <i class="bx bx-user-plus me-1"></i> Thêm Sinh Viên
+                </a>
+            </li>
+
+            <li class="nav-item d-none d-md-block">
+                <a asp-area="Admin" asp-controller="Grade" asp-action="Create" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-edit me-1"></i> Nhập Điểm
+                </a>
+            </li>
+        }
+
+        @if (isLoggedIn)
+        {
+            <!-- User Dropdown khi đã đăng nhập -->
+            <li class="nav-item navbar-dropdown dropdown-user dropdown ms-2">
+                <a class="nav-link dropdown-toggle hide-arrow d-flex align-items-center" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                        <img src="@userAvatar" alt="@fullName" class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                    <div class="d-none d-lg-block ms-2 text-start">
+                        <span class="fw-semibold d-block text-dark small" style="line-height: 1.2;">@fullName</span>
+                        <small class="badge bg-label-primary px-1 py-0" style="font-size: 0.68rem;">@userRole</small>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                    <li>
+                        <a class="dropdown-item" href="#">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-online me-3">
+                                    <img src="@userAvatar" alt="@fullName" class="rounded-circle" />
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="fw-semibold d-block">@fullName</span>
+                                    <small class="text-muted">@Context.Session.GetString("Email")</small>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    @if (userRole == "Admin")
+                    {
+                        <li>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                <i class="bx bx-cog me-2 text-primary"></i>
+                                <span>Bảng Quản Trị Hệ Thống</span>
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a class="dropdown-item" asp-area="" asp-controller="Student" asp-action="Lookup">
+                            <i class="bx bx-search me-2 text-info"></i>
+                            <span>Tra Cứu Điểm Online</span>
+                        </a>
+                    </li>
+                    <li><div class="dropdown-divider"></div></li>
+                    <li>
+                        <a class="dropdown-item text-danger" asp-area="" asp-controller="Account" asp-action="Logout">
+                            <i class="bx bx-power-off me-2"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        }
+        else
+        {
+            <!-- Nút Đăng nhập & Đăng ký khi chưa đăng nhập -->
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-log-in me-1"></i> Đăng Nhập
+                </a>
+            </li>
+            <li class="nav-item d-none d-sm-block">
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-sm btn-primary">
+                    <i class="bx bx-user-plus me-1"></i> Đăng Ký
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

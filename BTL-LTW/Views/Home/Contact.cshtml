@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "Liên Hệ & Hỗ Trợ Sinh Viên";
+}
+
+<div class="container-xxl flex-grow-1">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Hỗ trợ /</span> Liên hệ phòng đào tạo
+    </h4>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card h-100">
+                <div class="card-header border-bottom">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-buildings text-primary me-2"></i>Thông Tin Trụ Sở & Học Vụ</h5>
+                </div>
+                <div class="card-body pt-3">
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-primary p-2">
+                                <i class="bx bx-map-pin fs-4"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Địa chỉ trụ sở chính</h6>
+                            <p class="text-muted small mb-0">Số 1 Đại Cồ Việt, Quận Hai Bà Trưng, TP. Hà Nội</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-success p-2">
+                                <i class="bx bx-phone-call fs-4"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Đường dây nóng (Hotline)</h6>
+                            <p class="text-muted small mb-0">(024) 3869 2463 / 0987 123 456</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-warning p-2">
+                                <i class="bx bx-envelope fs-4"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Hộp thư điện tử</h6>
+                            <p class="text-muted small mb-0">phongdaotao@student.edu.vn</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start">
+                        <div class="avatar flex-shrink-0 me-3">
+                            <span class="avatar-initial rounded bg-label-info p-2">
+                                <i class="bx bx-time-five fs-4"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Thời gian tiếp sinh viên</h6>
+                            <p class="text-muted small mb-0">Thứ 2 - Thứ 6: 08:00 - 11:30 | 13:30 - 17:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card h-100">
+                <div class="card-header border-bottom">
+                    <h5 class="card-title mb-0 fw-bold"><i class="bx bx-send text-primary me-2"></i>Gửi Phiếu Yêu Cầu Hỗ Trợ</h5>
+                </div>
+                <div class="card-body pt-3">
+                    <form onsubmit="alert('Cảm ơn bạn! Yêu cầu hỗ trợ đã được chuyển tiếp thành công đến Phòng Đào Tạo.'); return false;">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Họ và tên</label>
+                                <input type="text" class="form-control" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Mã sinh viên</label>
+                                <input type="text" class="form-control" placeholder="SV202201" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Email sinh viên</label>
+                                <input type="email" class="form-control" placeholder="example@student.edu.vn" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Số điện thoại</label>
+                                <input type="tel" class="form-control" placeholder="0987xxxxxx" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Nội dung hỗ trợ</label>
+                                <select class="form-select">
+                                    <option>Phúc khảo điểm thi học phần</option>
+                                    <option>Cập nhật thông tin lý lịch cá nhân</option>
+                                    <option>Cấp bảng điểm học tập chính thức</option>
+                                    <option>Thắc mắc chương trình đào tạo & học phí</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Ghi chú cụ thể</label>
+                                <textarea rows="4" class="form-control" placeholder="Nhập chi tiết yêu cầu hỗ trợ..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bx bx-paper-plane me-1"></i> Gửi phiếu yêu cầu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+@model BTL_LTW.Models.Student
+@{
+    ViewData["Title"] = "Thêm Sinh Viên Mới";
+}
+
+<div class="container-xxl flex-grow-1">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Đào tạo / Sinh viên /</span> Thêm mới hồ sơ
+    </h4>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="bx bx-user-plus text-primary me-2"></i>Nhập Thông Tin Sinh Viên</h5>
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                        <i class="bx bx-arrow-back me-1"></i> Quay lại
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                        <!-- Khối 1: Thông tin định danh -->
+                        <div class="divider text-start mb-4">
+                            <div class="divider-text fw-bold text-primary">
+                                <i class="bx bx-id-card me-1"></i> 1. Thông Tin Cá Nhân & Liên Hệ
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="StudentCode" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-barcode"></i></span>
+                                    <input asp-for="StudentCode" class="form-control" placeholder="VD: SV202401" />
+                                </div>
+                                <span asp-validation-for="StudentCode" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="FullName" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-user"></i></span>
+                                    <input asp-for="FullName" class="form-control" placeholder="Nhập họ và tên đầy đủ..." />
+                                </div>
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Birthday" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <input asp-for="Birthday" type="date" class="form-control" />
+                                <span asp-validation-for="Birthday" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Gender" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <select asp-for="Gender" class="form-select">
+                                    <option value="1">Nam</option>
+                                    <option value="0">Nữ</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Ảnh đại diện</label>
+                                <input type="file" name="avatarFile" class="form-control" accept="image/*" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                    <input asp-for="Email" type="email" class="form-control" placeholder="example@student.edu.vn" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-phone"></i></span>
+                                    <input asp-for="Phone" class="form-control" placeholder="0987123456" />
+                                </div>
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-map-pin"></i></span>
+                                    <input asp-for="Address" class="form-control" placeholder="Địa chỉ thường trú hoặc quê quán..." />
+                                </div>
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Khối 2: Thông tin học vụ -->
+                        <div class="divider text-start mb-4">
+                            <div class="divider-text fw-bold text-primary">
+                                <i class="bx bx-book me-1"></i> 2. Thông Tin Đào Tạo & Điểm Tích Lũy
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="DepartmentId" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <select asp-for="DepartmentId" asp-items="@ViewBag.DepartmentId" class="form-select">
+                                    <option value="">-- Chọn Khoa / Viện --</option>
+                                </select>
+                                <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ClassName" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <input asp-for="ClassName" class="form-control" placeholder="VD: CNTT1-K15" />
+                                <span asp-validation-for="ClassName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="EnrollmentYear" class="form-label fw-semibold"></label>
+                                <input asp-for="EnrollmentYear" type="number" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="Status" class="form-label fw-semibold"></label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="1">Đang học</option>
+                                    <option value="2">Đã tốt nghiệp</option>
+                                    <option value="3">Bảo lưu</option>
+                                    <option value="4">Đình chỉ</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="GPA" class="form-label fw-semibold"></label>
+                                <input asp-for="GPA" type="number" step="0.1" class="form-control" placeholder="8.0" />
+                                <span asp-validation-for="GPA" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                            <a asp-action="Index" class="btn btn-label-secondary">Hủy bỏ</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bx bx-save me-1"></i> Lưu thông tin sinh viên
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,194 @@
+@model BTL_LTW.Models.LoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Đăng Nhập Hệ Thống";
+}
+
+<!DOCTYPE html>
+<html lang="vi" class="light-style customizer-hide">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Đăng Nhập - EduPortal Quản Lý Sinh Viên</title>
+
+    <!-- Google Fonts: Public Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+
+    <!-- Boxicons CSS -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/sneat.css" asp-append-version="true" />
+
+    <style>
+        body {
+            background-color: #f5f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Public Sans', sans-serif;
+            padding: 1.5rem;
+        }
+        .auth-card {
+            max-width: 440px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 20px 0 rgba(67, 89, 113, 0.12);
+            border: 0;
+            overflow: hidden;
+        }
+        .demo-account-pill {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .demo-account-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(105, 108, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card card">
+        <div class="card-body p-4 p-sm-5">
+            <!-- Logo Brand -->
+            <div class="app-brand justify-content-center mb-4 p-0 border-0">
+                <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
+                    <span class="app-brand-logo text-primary">
+                        <i class="bx bxs-graduation" style="font-size: 2.2rem;"></i>
+                    </span>
+                    <span class="app-brand-text fw-bolder text-dark fs-4">
+                        EduPortal
+                    </span>
+                </a>
+            </div>
+
+            <!-- Header Text -->
+            <h4 class="mb-2 fw-bold text-dark text-center">Chào Mừng Trở Lại! 👋</h4>
+            <p class="mb-4 text-muted small text-center">Vui lòng đăng nhập tài khoản để truy cập hệ thống đào tạo</p>
+
+            <!-- Alerts -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show border-0 small py-2 d-flex align-items-center mb-3" role="alert">
+                    <i class="bx bx-check-circle fs-5 me-2"></i>
+                    <div>@TempData["SuccessMessage"]</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <form asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post" id="formLogin">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 small py-2 mb-3" role="alert"></div>
+
+                <!-- Username or Email -->
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label fw-semibold"></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-user"></i></span>
+                        <input asp-for="Username" id="inputUsername" class="form-control" placeholder="Nhập tên đăng nhập hoặc email" autofocus />
+                    </div>
+                    <span asp-validation-for="Username" class="text-danger small"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3 form-password-toggle">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label asp-for="Password" class="form-label fw-semibold mb-0"></label>
+                        <a href="javascript:void(0);" onclick="alert('Vui lòng liên hệ Phòng Đào Tạo để được cấp lại mật khẩu!');" class="small text-primary text-decoration-none">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bx bx-lock-alt"></i></span>
+                        <input asp-for="Password" id="inputPassword" type="password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                        <span class="input-group-text cursor-pointer" id="btnTogglePassword" style="cursor: pointer;">
+                            <i class="bx bx-hide" id="iconEye"></i>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
+                </div>
+
+                <!-- Remember Me -->
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="remember-me" />
+                        <label class="form-check-label small" for="remember-me">
+                            Ghi nhớ tài khoản
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mb-4">
+                    <button class="btn btn-primary d-grid w-100 py-2 fw-semibold" type="submit">
+                        <i class="bx bx-log-in me-1"></i> Đăng Nhập
+                    </button>
+                </div>
+            </form>
+
+            <!-- Nút bấm điền nhanh tài khoản mẫu để test -->
+            <div class="p-3 bg-light rounded-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="small fw-bold text-muted"><i class="bx bx-bulb text-warning me-1"></i>Tài khoản mẫu để test nhanh:</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-label-primary demo-account-pill py-2 px-2" onclick="fillAccount('admin', '123')">
+                        <i class="bx bx-shield-quarter me-1"></i> Admin (admin / 123)
+                    </span>
+                    <span class="badge bg-label-success demo-account-pill py-2 px-2" onclick="fillAccount('giangvien', '123')">
+                        <i class="bx bx-user-voice me-1"></i> Giảng viên (giangvien / 123)
+                    </span>
+                    <span class="badge bg-label-info demo-account-pill py-2 px-2" onclick="fillAccount('sinhvien', '123')">
+                        <i class="bx bx-book-reader me-1"></i> Sinh viên (sinhvien / 123)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Footer Links -->
+            <p class="text-center mb-2 small">
+                <span>Chưa có tài khoản?</span>
+                <a asp-action="Register" class="fw-semibold text-primary text-decoration-none">
+                    Đăng ký ngay
+                </a>
+            </p>
+            <p class="text-center mb-0 small">
+                <a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">
+                    <i class="bx bx-arrow-back me-1"></i> Quay về trang chủ
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Script tương tác -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle ẩn/hiện mật khẩu
+        const btnToggle = document.getElementById('btnTogglePassword');
+        const inputPass = document.getElementById('inputPassword');
+        const iconEye = document.getElementById('iconEye');
+
+        btnToggle?.addEventListener('click', function() {
+            if (inputPass.type === 'password') {
+                inputPass.type = 'text';
+                iconEye.classList.remove('bx-hide');
+                iconEye.classList.add('bx-show');
+            } else {
+                inputPass.type = 'password';
+                iconEye.classList.remove('bx-show');
+                iconEye.classList.add('bx-hide');
+            }
+        });
+
+        // Điền tự động tài khoản mẫu khi click
+        function fillAccount(username, password) {
+            document.getElementById('inputUsername').value = username;
+            document.getElementById('inputPassword').value = password;
+        }
+    </script>
+</body>
+</html>

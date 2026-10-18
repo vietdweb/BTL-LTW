@@ -1,0 +1,19 @@
+@model IEnumerable<BTL_LTW.Models.Department>
+
+<li class="menu-item">
+    <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-buildings"></i>
+        <div>Khoa & Viện chuyên môn</div>
+    </a>
+    <ul class="menu-sub">
+        @foreach (var dept in Model)
+        {
+            <li class="menu-item">
+                <a class="menu-link" asp-controller="Student" asp-action="Index" asp-route-departmentId="@dept.Id">
+                    <span class="badge bg-label-primary me-2">@dept.DepartmentCode</span>
+                    <div>@dept.Name</div>
+                </a>
+            </li>
+        }
+    </ul>
+</li>

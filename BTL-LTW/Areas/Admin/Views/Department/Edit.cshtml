@@ -1,0 +1,106 @@
+@model BTL_LTW.Models.Department
+@{
+    ViewData["Title"] = "Chỉnh Sửa Khoa / Viện: " + Model.Name;
+}
+
+<div class="container-xxl flex-grow-1">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Đào tạo / Khoa & Viện /</span> Cập nhật: @Model.Name
+    </h4>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-9">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="bx bx-edit text-primary me-2"></i>Chỉnh Sửa Thông Tin Khoa</h5>
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                        <i class="bx bx-arrow-back me-1"></i> Quay lại
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label asp-for="DepartmentCode" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-barcode"></i></span>
+                                    <input asp-for="DepartmentCode" class="form-control" />
+                                </div>
+                                <span asp-validation-for="DepartmentCode" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-8">
+                                <label asp-for="Name" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                                    <input asp-for="Name" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Dean" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-user-voice"></i></span>
+                                    <input asp-for="Dean" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Dean" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Phone" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-phone"></i></span>
+                                    <input asp-for="Phone" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                                    <input asp-for="Email" type="email" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="EstablishedDate" class="form-label fw-semibold"></label>
+                                <input asp-for="EstablishedDate" type="date" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Status" class="form-label fw-semibold"></label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="1">Đang hoạt động</option>
+                                    <option value="0">Tạm ngưng</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label fw-semibold"></label>
+                                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                            <a asp-action="Index" class="btn btn-label-secondary">Hủy</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bx bx-check me-1"></i> Cập nhật thay đổi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

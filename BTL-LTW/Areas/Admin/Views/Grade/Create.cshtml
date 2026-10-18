@@ -1,0 +1,86 @@
+@model BTL_LTW.Models.Grade
+@{
+    ViewData["Title"] = "Nhập Điểm Học Phần Cho Sinh Viên";
+}
+
+<div class="container-xxl flex-grow-1">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Đào tạo / Bảng điểm /</span> Nhập điểm học phần
+    </h4>
+
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-9">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="bx bx-edit text-primary me-2"></i>Ghi Nhận Kết Quả Học Tập</h5>
+                    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                        <i class="bx bx-arrow-back me-1"></i> Quay lại
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="StudentId" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bx bx-user"></i></span>
+                                <select asp-for="StudentId" asp-items="@ViewBag.StudentId" class="form-select">
+                                    <option value="">-- Chọn Sinh Viên --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="StudentId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CourseId" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bx bx-book"></i></span>
+                                <select asp-for="CourseId" asp-items="@ViewBag.CourseId" class="form-select">
+                                    <option value="">-- Chọn Môn Học / Học Phần --</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="CourseId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label asp-for="AttendanceScore" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <input asp-for="AttendanceScore" type="number" step="0.1" min="0" max="10" class="form-control" placeholder="10.0" />
+                                <span asp-validation-for="AttendanceScore" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="MidtermScore" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <input asp-for="MidtermScore" type="number" step="0.1" min="0" max="10" class="form-control" placeholder="8.0" />
+                                <span asp-validation-for="MidtermScore" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="FinalScore" class="form-label fw-semibold"></label> <span class="text-danger">*</span>
+                                <input asp-for="FinalScore" type="number" step="0.1" min="0" max="10" class="form-control" placeholder="8.5" />
+                                <span asp-validation-for="FinalScore" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-light rounded-3 mb-4 small text-muted">
+                            <i class="bx bx-info-circle text-primary me-1"></i> Quy chế tính điểm học phần:
+                            <strong>Tổng kết = CC &times; 10% + GK &times; 30% + CK &times; 60%</strong>. Điểm tổng kết &ge; 4.0 là Đạt (Qua môn).
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                            <a asp-action="Index" class="btn btn-label-secondary">Hủy</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bx bx-save me-1"></i> Lưu kết quả điểm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

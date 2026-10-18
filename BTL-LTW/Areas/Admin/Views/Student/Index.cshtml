@@ -1,0 +1,144 @@
+@model IEnumerable<BTL_LTW.Models.Student>
+@{
+    ViewData["Title"] = "Quản Lý Danh Sách Sinh Viên";
+}
+
+<div class="container-xxl flex-grow-1">
+    <!-- Tiêu đề trang Sneat -->
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Đào tạo /</span> Quản lý thông tin sinh viên
+    </h4>
+
+    <!-- Khối Card chính -->
+    <div class="card">
+        <!-- Card Header: Bộ lọc tìm kiếm & Nút thêm mới (như mẫu QLThuVien) -->
+        <div class="card-header border-bottom">
+            <form method="get" asp-action="Index" class="row g-2 align-items-center">
+                <!-- Ô tìm kiếm từ khóa -->
+                <div class="col-md-4">
+                    <div class="input-group search-input-group">
+                        <span class="input-group-text bg-transparent border-0 text-muted ps-3">
+                            <i class="bx bx-search fs-5"></i>
+                        </span>
+                        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control border-0 bg-transparent shadow-none" placeholder="Tìm theo tên, mã SV, lớp, email...">
+                    </div>
+                </div>
+
+                <!-- Lọc theo Khoa -->
+                <div class="col-md-3">
+                    <select name="departmentId" asp-items="@ViewBag.Departments" class="form-select">
+                        <option value="">-- Tất cả Khoa / Viện --</option>
+                    </select>
+                </div>
+
+                <!-- Lọc theo Trạng thái -->
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">-- Trạng thái --</option>
+                        <option value="1" selected="@(ViewBag.Status == 1)">Đang học</option>
+                        <option value="2" selected="@(ViewBag.Status == 2)">Tốt nghiệp</option>
+                        <option value="3" selected="@(ViewBag.Status == 3)">Bảo lưu</option>
+                        <option value="4" selected="@(ViewBag.Status == 4)">Đình chỉ</option>
+                    </select>
+                </div>
+
+                <!-- Nút Lọc & Nút Thêm mới -->
+                <div class="col-md-3 d-flex gap-2 justify-content-end">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bx bx-filter-alt me-1"></i> Lọc
+                    </button>
+                    <a asp-action="Create" class="btn btn-primary text-nowrap">
+                        <i class="bx bx-plus me-1"></i> Thêm mới
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bảng Dữ Liệu Sinh Viên Chuẩn Sneat -->
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">Ảnh</th>
+                        <th>Mã SV</th>
+                        <th>Họ và Tên</th>
+                        <th>Ngày sinh</th>
+                        <th>Giới tính</th>
+                        <th>Khoa / Lớp</th>
+                        <th class="text-center">Điểm GPA</th>
+                        <th class="text-center">Xếp loại</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-end" style="min-width: 140px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center py-5 text-muted">
+                                <i class="bx bx-folder-open fs-1 d-block mb-2"></i>
+                                Không tìm thấy sinh viên nào phù hợp với điều kiện tìm kiếm.
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="avatar avatar-online">
+                                    <img src="@s.Avatar" alt="@s.FullName" class="rounded-circle" />
+                                </div>
+                            </td>
+                            <td><span class="badge bg-label-dark fw-bold">@s.StudentCode</span></td>
+                            <td>
+                                <div class="fw-bold text-dark">@s.FullName</div>
+                                <small class="text-muted">@s.Email</small>
+                            </td>
+                            <td class="small">@s.Birthday.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (s.Gender == 1)
+                                {
+                                    <span class="badge bg-label-info"><i class="bx bx-male-sign me-1"></i>Nam</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-danger"><i class="bx bx-female-sign me-1"></i>Nữ</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="fw-semibold text-dark small">@s.DepartmentName</div>
+                                <span class="badge bg-label-secondary small">@s.ClassName</span>
+                            </td>
+                            <td class="text-center fw-bold text-primary fs-6">@s.GPA</td>
+                            <td class="text-center">
+                                <span class="badge @s.RankBadgeClass">@s.AcademicRank</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge @s.StatusBadgeClass">@s.StatusText</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-icon btn-label-info" data-bs-toggle="tooltip" title="Chi tiết & Điểm">
+                                        <i class="bx bx-show"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-icon btn-label-primary" data-bs-toggle="tooltip" title="Chỉnh sửa">
+                                        <i class="bx bx-edit-alt"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@s.Id" class="btn btn-icon btn-label-danger" data-bs-toggle="tooltip" title="Xóa">
+                                        <i class="bx bx-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer tóm tắt -->
+        <div class="card-footer d-flex justify-content-between align-items-center py-3 bg-light">
+            <span class="text-muted small">Hiển thị <strong>@Model.Count()</strong> kết quả</span>
+            <span class="text-muted small">Năm học @DateTime.Now.Year - @(DateTime.Now.Year + 1)</span>
+        </div>
+    </div>
+</div>

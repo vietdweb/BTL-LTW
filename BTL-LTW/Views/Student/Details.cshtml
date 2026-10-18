@@ -1,0 +1,145 @@
+@model BTL_LTW.Models.Student
+@{
+    ViewData["Title"] = "Hồ Sơ Sinh Viên: " + Model.FullName;
+    var grades = ViewBag.Grades as List<BTL_LTW.Models.Grade> ?? new List<BTL_LTW.Models.Grade>();
+    var dept = ViewBag.Department as BTL_LTW.Models.Department;
+}
+
+<div class="bg-primary text-white py-4 mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-1">Hồ Sơ Sinh Viên & Kết Quả Học Tập</h2>
+            <span class="text-white-50">Mã sinh viên: @Model.StudentCode</span>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-light rounded-pill btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <!-- Cột trái: Thông tin sinh viên -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4">
+                <div class="mx-auto mb-3" style="width: 110px; height: 110px;">
+                    <img src="@Model.Avatar" class="rounded-circle border border-3 border-primary w-100 h-100 object-fit-cover shadow-sm" alt="@Model.FullName">
+                </div>
+                <h4 class="fw-bold mb-1">@Model.FullName</h4>
+                <div class="mb-3">
+                    <span class="badge bg-light text-dark border px-3 py-1 fs-6 fw-bold">@Model.StudentCode</span>
+                </div>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    <span class="badge @Model.StatusBadgeClass">@Model.StatusText</span>
+                    <span class="badge @Model.RankBadgeClass">Học lực @Model.AcademicRank</span>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 text-start small">
+                    <div class="mb-2"><strong><i class="bi bi-diagram-3 me-2 text-primary"></i>Khoa:</strong> @Model.DepartmentName</div>
+                    <div class="mb-2"><strong><i class="bi bi-mortarboard me-2 text-primary"></i>Lớp:</strong> @Model.ClassName</div>
+                    <div class="mb-2"><strong><i class="bi bi-calendar-event me-2 text-primary"></i>Năm nhập học:</strong> @Model.EnrollmentYear</div>
+                    <div class="mb-0"><strong><i class="bi bi-star-fill text-warning me-2"></i>Điểm GPA tích lũy:</strong> <span class="fs-6 fw-bold text-danger">@Model.GPA / 10.0</span></div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                <h5 class="fw-bold border-bottom pb-2 mb-3"><i class="bi bi-person-lines-fill text-primary me-2"></i>Lý Lịch Trích Ngang</h5>
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-3">
+                        <span class="text-muted d-block">Ngày sinh:</span>
+                        <strong class="text-dark">@Model.Birthday.ToString("dd/MM/yyyy") (@(Model.Gender == 1 ? "Nam" : "Nữ"))</strong>
+                    </li>
+                    <li class="mb-3">
+                        <span class="text-muted d-block">Hộp thư điện tử:</span>
+                        <strong class="text-dark">@Model.Email</strong>
+                    </li>
+                    <li class="mb-3">
+                        <span class="text-muted d-block">Số điện thoại:</span>
+                        <strong class="text-dark">@Model.Phone</strong>
+                    </li>
+                    <li>
+                        <span class="text-muted d-block">Địa chỉ thường trú:</span>
+                        <strong class="text-dark">@Model.Address</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Cột phải: Bảng điểm các học phần -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-journal-text text-primary me-2"></i>Bảng Điểm Học Phần Đã Tích Lũy</h5>
+                    <span class="badge bg-light text-dark border">@grades.Count môn học</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Mã môn</th>
+                                    <th>Tên môn học</th>
+                                    <th class="text-center">Số TC</th>
+                                    <th class="text-center">CC (10%)</th>
+                                    <th class="text-center">GK (30%)</th>
+                                    <th class="text-center">CK (60%)</th>
+                                    <th class="text-center">Tổng kết</th>
+                                    <th class="text-center">Điểm chữ</th>
+                                    <th class="text-center">Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!grades.Any())
+                                {
+                                    <tr>
+                                        <td colspan="9" class="text-center py-5 text-muted">
+                                            <i class="bi bi-journal-x fs-1 d-block mb-2"></i>
+                                            Sinh viên chưa có dữ liệu điểm học phần.
+                                        </td>
+                                    </tr>
+                                }
+                                @foreach (var g in grades)
+                                {
+                                    <tr>
+                                        <td><span class="badge bg-light text-dark border">@g.CourseCode</span></td>
+                                        <td class="fw-semibold">@g.CourseName</td>
+                                        <td class="text-center">@g.Credits</td>
+                                        <td class="text-center">@g.AttendanceScore</td>
+                                        <td class="text-center">@g.MidtermScore</td>
+                                        <td class="text-center">@g.FinalScore</td>
+                                        <td class="text-center fw-bold text-primary">@g.AverageScore</td>
+                                        <td class="text-center fw-bold">
+                                            <span class="badge @(g.LetterGrade.StartsWith("A") ? "bg-danger" : g.LetterGrade.StartsWith("B") ? "bg-success" : "bg-secondary")">
+                                                @g.LetterGrade
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (g.IsPassed)
+                                            {
+                                                <span class="text-success small fw-bold"><i class="bi bi-check-circle-fill"></i> Đạt</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger small fw-bold"><i class="bi bi-x-circle-fill"></i> Học lại</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                @if (grades.Any())
+                {
+                    <div class="card-footer bg-light py-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">Tổng số tín chỉ tích lũy: <strong>@grades.Sum(g => g.Credits)</strong></span>
+                            <span class="fw-bold">Điểm trung bình chung tích lũy (GPA): <span class="badge bg-primary fs-6">@Model.GPA / 10.0</span></span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+@using Microsoft.AspNetCore.Http
+
+@{
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    var username = Context.Session.GetString("Username");
+    var fullName = Context.Session.GetString("FullName") ?? "Khách";
+    var userRole = Context.Session.GetString("UserRole") ?? "Chưa đăng nhập";
+    var userAvatar = Context.Session.GetString("Avatar") ?? "/images/students/avatar-1.svg";
+    bool isLoggedIn = !string.IsNullOrEmpty(username);
+
+    string IsActive(string controller, string action = "Index", string? area = null)
+    {
+        bool areaMatch = string.IsNullOrEmpty(area) ? string.IsNullOrEmpty(currentArea) : string.Equals(currentArea, area, StringComparison.OrdinalIgnoreCase);
+        bool controllerMatch = string.Equals(currentController, controller, StringComparison.OrdinalIgnoreCase);
+        bool actionMatch = string.IsNullOrEmpty(action) || string.Equals(currentAction, action, StringComparison.OrdinalIgnoreCase);
+
+        return (areaMatch && controllerMatch && actionMatch) ? "active" : "";
+    }
+}
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="app-brand-link">
+            <span class="app-brand-logo demo text-primary">
+                <i class="bx bxs-graduation fs-1"></i>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder">
+                EduPortal
+                <br />
+                <span class="fs-tiny fw-semibold text-muted" style="font-size: 0.72rem; letter-spacing: 1px;">QUẢN LÝ SINH VIÊN</span>
+            </span>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- 1. TỔNG QUAN -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Tổng quan</span></li>
+
+        <li class="menu-item @IsActive("Home", "Index")">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div>Trang chủ & Thống kê</div>
+            </a>
+        </li>
+
+        <!-- 2. QUẢN LÝ ĐÀO TẠO -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Quản lý đào tạo</span></li>
+
+        <li class="menu-item @IsActive("Student", "Index", "Admin") @IsActive("Student", "Index")">
+            <a asp-area="Admin" asp-controller="Student" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user-pin"></i>
+                <div>Hồ sơ sinh viên</div>
+            </a>
+        </li>
+
+        <li class="menu-item @IsActive("Department", "Index", "Admin")">
+            <a asp-area="Admin" asp-controller="Department" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-buildings"></i>
+                <div>Khoa & Viện đào tạo</div>
+            </a>
+        </li>
+
+        <li class="menu-item @IsActive("Grade", "Index", "Admin")">
+            <a asp-area="Admin" asp-controller="Grade" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-award"></i>
+                <div>Bảng điểm & Học phần</div>
+            </a>
+        </li>
+
+        <!-- 3. TRA CỨU & DỊCH VỤ -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Tra cứu & Dịch vụ</span></li>
+
+        <li class="menu-item @IsActive("Student", "Lookup")">
+            <a asp-area="" asp-controller="Student" asp-action="Lookup" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-search-alt"></i>
+                <div>Tra cứu điểm online</div>
+            </a>
+        </li>
+
+        <li class="menu-item @IsActive("Home", "About")">
+            <a asp-area="" asp-controller="Home" asp-action="About" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-info-circle"></i>
+                <div>Giới thiệu hệ thống</div>
+            </a>
+        </li>
+
+        <li class="menu-item @IsActive("Home", "Contact")">
+            <a asp-area="" asp-controller="Home" asp-action="Contact" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-support"></i>
+                <div>Liên hệ hỗ trợ</div>
+            </a>
+        </li>
+
+        <!-- 4. TÀI KHOẢN -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Tài khoản</span></li>
+
+        @if (!isLoggedIn)
+        {
+            <li class="menu-item @IsActive("Account", "Login")">
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-log-in"></i>
+                    <div>Đăng nhập</div>
+                </a>
+            </li>
+            <li class="menu-item @IsActive("Account", "Register")">
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                    <div>Đăng ký tài khoản</div>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="menu-item">
+                <a asp-area="" asp-controller="Account" asp-action="Logout" class="menu-link text-danger">
+                    <i class="menu-icon tf-icons bx bx-power-off text-danger"></i>
+                    <div>Đăng xuất</div>
+                </a>
+            </li>
+        }
+    </ul>
+
+    <!-- Bottom User Quick Info -->
+    <div class="p-3 border-top mt-auto bg-light">
+        <div class="d-flex align-items-center">
+            <div class="avatar avatar-online me-2">
+                <img src="@userAvatar" alt="@fullName" class="rounded-circle" />
+            </div>
+            <div class="overflow-hidden">
+                <div class="fw-bold small text-truncate text-dark">@fullName</div>
+                <div class="badge bg-label-primary px-1 py-0" style="font-size: 0.68rem;">@userRole</div>
+            </div>
+        </div>
+    </div>
+</aside>
